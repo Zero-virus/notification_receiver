@@ -9,10 +9,10 @@ import (
 
 type paymentResponse struct {
 	TransactionID string  `bson:"transactionID" json:"transaction_id"`
-	PaymentID     string  `bson:"paymentID" json:"payment_id"`
-	Amount        float64 `bson:"amount" json:"amount"`
-	Status        string  `bson:"status" json:"status"`
-	Source        string  `bson:"source" json:"source"`
+	PaymentID     string  `bson:"paymentID"		json:"payment_id"`
+	Amount        float64 `bson:"amount"		json:"amount"`
+	Status        string  `bson:"status"		json:"status"`
+	Source        string  `bson:"source"		json:"source"`
 }
 
 type ctxKey string

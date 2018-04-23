@@ -15,6 +15,16 @@ type paymentResponse struct {
 	Source        string  `json:"source"`
 }
 
+
+func init() {
+	flag.Usage = func() {
+		fmt.Fprintln(os.Stderr, appUsage)
+		for -, c := range subcmds {
+			fmt.Fprintf(os.Stderr, "")
+		}
+	}
+}
+
 func AllNoti(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "not implemented yet !")
 }
@@ -28,8 +38,37 @@ func CreateNoti(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	r := mux.NewRouter()
-	r.HandleFunc("/notification", AllNoti).Methods("GET")
-	r.HandleFunc("/notification", CreateNoti).Methods("POST")
-	r.HandleFunc("/notification/{id}", FindNoti).Methods("GET")
+	flag.Parse()
+
+	if flag.
+}
+
+func serveCmd(args []string) {
+
+	sigiriyaAPIURL := fs.String("sigiriya-api-url", "http://localhost:8090", "list of allowed origins separated by comma.")
+	sigiriyaToken := fs.String("auth-secret-key", "development_token", "Sigiriya authentication token")
+
+	sigiriyaClient := sigiriya.NewClient(&sigiriya.Config{
+		APIURL: *sigiriyaAPIURL,
+		Token:	*sigiriyaToken,
+	})
+	logger.Println("Connected to sigiriya")
+
+	ctxPayments := &paymentsApi.Context{
+		KhipuCLient:	khipuCLient,
+		SigiriyaClient:	sigiriyaClient,
+	}
+
+	n := negroni.New(
+		negroni.NewRecovery(),
+		negronilogrus.NewMiddlewareFromLogger(logger, "Notifications API"), recovery.JSONRecovery(false),
+	)
+
+
+	mux := http.NewServeMux()
+	mux.Handle("/notifications/khipu/",http.StripPrefix("/notifications/khipu",paymentsApi.Handle(ctxPayments)))
+
+	n.UseHandler(mux)
+
+	addr :=
 }
